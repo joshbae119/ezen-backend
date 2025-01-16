@@ -23,7 +23,7 @@ public class TodoDto {
 	
 	private boolean complete;
 	
-	@JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "yyyy-MM-dd") //dto는 날짜 포멧을 맞춰야 한다.
 	private LocalDate dueDate;
 
 
