@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springboot.biz.dto.PageRequestDto;
+import com.springboot.biz.dto.PageResponseDto;
 import com.springboot.biz.dto.TodoDto;
 import com.springboot.biz.service.TodoService;
 
@@ -20,6 +22,11 @@ public class TodoController {
 	@GetMapping("/{tno}")
 	public TodoDto get(@PathVariable(name="tno") Long tno) {
 		return todoService.get(tno);
+	}
+	
+	@GetMapping("/list")
+	public PageResponseDto<TodoDto> list(PageRequestDto pageRequestDto){
+		return todoService.list(pageRequestDto);
 	}
 
 }
