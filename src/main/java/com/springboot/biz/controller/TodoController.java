@@ -23,41 +23,36 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequiredArgsConstructor
 @RequestMapping("/api/todo")
 public class TodoController {
-	
-	private final TodoService todoService;
-	
-	@GetMapping("/{tno}")
-	public TodoDto get(@PathVariable(name="tno") Long tno) {
-		return todoService.get(tno);
-	}
-	
-	@GetMapping("/list")
-	public PageResponseDto<TodoDto> list(PageRequestDto pageRequestDto){
-		return todoService.list(pageRequestDto);
-	}
-	
-	@PostMapping("/")
-	public Map<String, Long> register(@RequestBody TodoDto todoDto){
-		Long tno = todoService.register(todoDto);
-		return Map.of("TNO", tno);
-	}
-	
-	@PutMapping("/{tno}")
-	public Map<String, String> modify(@PathVariable(name="tno") Long tno, @RequestBody TodoDto todoDto) {
-		todoDto.setTno(tno);
-		
-		todoService.modify(todoDto);
-		return Map.of("RESULT", "성공");
-	}
-	
-	@DeleteMapping("/{tno}")
-	public Map<String, String> remove(@PathVariable(name= "tno") Long tno){
-		todoService.remove(tno);
-		return Map.of("결과", "성공");
-	}
-	
-	
-	
-	
 
+    private final TodoService todoService;
+
+    @GetMapping("/{tno}")
+    public TodoDto get(@PathVariable("tno") Long tno) {
+        return todoService.get(tno);
+    }
+
+    @GetMapping("/list")
+    public PageResponseDto<TodoDto> list(PageRequestDto pageRequestDTO) {
+        return todoService.list(pageRequestDTO);
+    }
+
+    @PostMapping("/")
+    public Map<String, Long> register(@RequestBody TodoDto todoDto) {
+        System.out.println("TodoDTO : " + todoDto);
+        Long tno = todoService.register(todoDto);
+        return Map.of("tno", tno);
+    }
+
+    @PutMapping("/{tno}")
+    public Map<String, String> modify(@PathVariable(name = "tno") Long tno, @RequestBody TodoDto todoDto) {
+        todoDto.setTno(tno);
+        todoService.modify(todoDto);
+        return Map.of("Result", "Success");
+    }
+
+    @DeleteMapping("/{tno}")
+    public Map<String, String> remove(@PathVariable(name = "tno") Long tno) {
+        todoService.remove(tno);
+        return Map.of("Result", "Success");
+    }
 }
