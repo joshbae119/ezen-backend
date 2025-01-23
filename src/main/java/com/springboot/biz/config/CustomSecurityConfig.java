@@ -1,6 +1,7 @@
 package com.springboot.biz.config;
 
 import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,36 +16,50 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-
 @Configuration
+@Log4j2 //로그 출력
 @RequiredArgsConstructor
-@Log4j2
 public class CustomSecurityConfig {
- @Bean
- public SecurityFilterChain filter(HttpSecurity http) throws Exception {
-     System.out.println("security filter chain");
-     log.info("security filter chain 적용!!!!!!");
-     http.cors(httpSecurityCorsConfigurer -> {
-         httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
-     });
-     http.sessionManagement(SessionConfig -> SessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-     http.csrf(config -> config.disable());
-     return http.build();
- }
- @Bean
- public CorsConfigurationSource corsConfigurationSource() {
-     CorsConfiguration configuration = new CorsConfiguration();
-     configuration.setAllowedOriginPatterns(Arrays.asList("*"));
-     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"));
-     configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Cache-Control"));
-     configuration.setAllowCredentials(true);
-     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-     source.registerCorsConfiguration("/**", configuration);
-     return source;
- }
- 
- @Bean
- public PasswordEncoder passwordEncoder() {
-     return new BCryptPasswordEncoder();
- }
+
+	@Bean
+	public SecurityFilterChain filter(HttpSecurity http) throws Exception{
+		System.out.println("------------시큐리티 적용------------");
+		log.info("***************security 적용***************");
+		
+		http.cors(httpSecurityCorsConfigurer -> {
+			httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource());
+		});
+		
+		http.sessionManagement(SessionConfig -> SessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		
+		http.csrf(config -> config.disable());
+		
+		http.formLogin(config -> {
+			config.loginPage("/api/member/login");
+		});
+		
+		return http.build();
+	}
+	
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		
+		CorsConfiguration confuguration = new CorsConfiguration();
+		
+		confuguration.setAllowedOriginPatterns(Arrays.asList("*")); //어떤 도메인(origin)에서 요청을 허용할지 지정
+		confuguration.setAllowedMethods(Arrays.asList("HEAD", "GET", "PUT", "DELETE", "POST")); //모든 Method에 대해 cors 허용
+		confuguration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); //클라이언트가 요청할 때, HTTP 헤더 중 허용할 헤더를 지정
+		confuguration.setAllowCredentials(true); //쿠키나 인증 정보를 포함한 요청을 허용
+		
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", confuguration);
+		
+		return source;
+	}
+	
+	
+	@Bean
+	public PasswordEncoder passWordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 }

@@ -7,19 +7,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.springboot.biz.controller.formatter.LocalDateFormatter;
 
-
-
-
 @Configuration
 public class CustomServletConfig implements WebMvcConfigurer {
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addFormatter(new LocalDateFormatter());
-    }
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
-                .maxAge(300)
-                .allowedHeaders("Authorization", "Content-Type", "Chache-Control");
-    }
+
+	public void addFormatters(FormatterRegistry registry) {
+		registry.addFormatter(new LocalDateFormatter());
+	}
+
 }
